@@ -1,4 +1,6 @@
-# Projet 1 — PlanesNet en pipeline MLOps complet (projet phare)
+# Projet 1 — PlanesNet en pipeline MLOps complet
+
+> Conception détaillée : [CONCEPTION.md](CONCEPTION.md). Démarrage après le 5 octobre 2026 — [05-actadoc](../05-actadoc/) est prioritaire d'ici là.
 
 **Objectif :** transformer le projet universitaire PlanesNet en un système ML déployé et opéré en production.
 
