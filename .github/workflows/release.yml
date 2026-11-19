@@ -1,0 +1,52 @@
+name: Release package
+
+# Triggered when a GitHub Release is published from a tag vX.Y.Z.
+# Publishing uses PyPI Trusted Publishing: no PyPI password or token is stored in GitHub.
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install build tool
+        run: python -m pip install --upgrade pip build
+      - name: Check that the tag matches the package version
+        run: |
+          version=$(python -c "import re;print(re.search(r'__version__ = \"(.+?)\"', open('src/planesnet/__init__.py').read()).group(1))")
+          if [ "v${version}" != "${GITHUB_REF_NAME}" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match package version ${version}."
+            exit 1
+          fi
+      - name: Build wheel and sdist
+        run: python -m build
+      - name: Test the built wheel in a clean environment
+        run: |
+          python -m venv /tmp/wheel-env
+          /tmp/wheel-env/bin/pip install dist/*.whl
+          /tmp/wheel-env/bin/python -c "import planesnet; print(planesnet.__version__)"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/planesnet-mlops
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - name: Publish distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
