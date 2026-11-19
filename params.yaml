@@ -1,0 +1,35 @@
+seed: 42
+
+data:
+  source: data/raw/planesnet.json
+  image_size: 20
+  channels: 3
+
+split:
+  # protocol: "scene" = StratifiedGroupKFold sur scene_id (honnete)
+  #           "random" = StratifiedShuffleSplit (protocole universitaire, conserve pour comparaison)
+  protocol: scene
+  n_folds: 5
+  test_size: 0.15
+  val_size: 0.15
+
+train:
+  arch: resnet18
+  pretrained: true
+  epochs: 30
+  batch_size: 256
+  lr: 0.001
+  weight_decay: 0.0001
+  amp: true
+  early_stopping_patience: 5
+
+evaluate:
+  # seuil de decision choisi sur la validation, jamais sur le test
+  threshold_metric: f1
+  abstention_margin: 0.1
+
+register:
+  model_name: planesnet
+  # promotion bloquee sous ces seuils
+  min_average_precision: 0.90
+  min_recall: 0.85

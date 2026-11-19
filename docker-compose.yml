@@ -1,0 +1,43 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: mlflow
+    volumes: [pgdata:/var/lib/postgresql/data]
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.13.0
+    depends_on: [postgres]
+    command: >
+      mlflow server --host 0.0.0.0 --port 5000
+      --backend-store-uri postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/mlflow
+      --artifacts-destination /mlartifacts
+    ports: ["5000:5000"]
+    volumes: [mlartifacts:/mlartifacts]
+
+  api:
+    build: .
+    depends_on: [mlflow]
+    environment:
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      MODEL_URI: ${MODEL_URI}
+    ports: ["8000:8000"]
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes: ["./monitoring/prometheus:/etc/prometheus:ro"]
+    ports: ["9090:9090"]
+
+  grafana:
+    image: grafana/grafana:latest
+    depends_on: [prometheus]
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
+    volumes: ["./monitoring/grafana:/etc/grafana/provisioning/dashboards:ro"]
+    ports: ["3000:3000"]
+
+volumes:
+  pgdata:
+  mlartifacts:

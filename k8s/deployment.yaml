@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: planesnet-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: planesnet-api }
+  template:
+    metadata:
+      labels: { app: planesnet-api }
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+    spec:
+      containers:
+        - name: api
+          image: ghcr.io/OWNER/REPO/planesnet-api:latest
+          ports: [{ containerPort: 8000 }]
+          env:
+            - name: MLFLOW_TRACKING_URI
+              value: http://mlflow:5000
+            - name: MODEL_URI
+              value: models:/planesnet@production
+          resources:
+            requests: { cpu: "250m", memory: "512Mi" }
+            limits: { cpu: "1", memory: "1536Mi" }
+          readinessProbe:
+            httpGet: { path: /healthz, port: 8000 }
+            initialDelaySeconds: 20
+          livenessProbe:
+            httpGet: { path: /healthz, port: 8000 }
+            initialDelaySeconds: 40

@@ -1,0 +1,5 @@
+{
+  "_comment": "Dashboard Grafana versionne (provisioning). A exporter depuis l UI puis committer.",
+  "title": "PlanesNet API",
+  "panels": []
+}

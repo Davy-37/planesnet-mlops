@@ -1,0 +1,13 @@
+groups:
+  - name: planesnet
+    rules:
+      - alert: LatenceP95Elevee
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 0.5
+        for: 5m
+        labels: { severity: warning }
+      - alert: TauxAbstentionAnormal
+        expr: rate(planesnet_predictions_abstained_total[15m]) / rate(planesnet_predictions_total[15m]) > 0.2
+        for: 15m
+        labels: { severity: critical }
+        annotations:
+          summary: "Derive probable des donnees entrantes"

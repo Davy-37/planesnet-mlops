@@ -1,0 +1,67 @@
+stages:
+  prepare:
+    cmd: python scripts/prepare.py
+    deps:
+      - scripts/prepare.py
+      - src/planesnet/data/_loader.py
+      - data/raw/planesnet.json
+    params:
+      - data
+    outs:
+      - data/processed/images.npy
+      - data/processed/manifest.csv
+
+  split:
+    cmd: python scripts/split.py
+    deps:
+      - scripts/split.py
+      - src/planesnet/data/_splitter.py
+      - data/processed/manifest.csv
+    params:
+      - seed
+      - split
+    outs:
+      - data/processed/splits/
+
+  train:
+    cmd: python scripts/train.py
+    deps:
+      - scripts/train.py
+      - src/planesnet/models/
+      - src/planesnet/training/_trainer.py
+      - data/processed/images.npy
+      - data/processed/splits/
+    params:
+      - seed
+      - train
+    outs:
+      - artifacts/model.pt
+    metrics:
+      - artifacts/train_metrics.json:
+          cache: false
+
+  evaluate:
+    cmd: python scripts/evaluate.py
+    deps:
+      - scripts/evaluate.py
+      - src/planesnet/training/_evaluator.py
+      - artifacts/model.pt
+    params:
+      - evaluate
+    metrics:
+      - artifacts/test_metrics.json:
+          cache: false
+    plots:
+      - artifacts/roc_curve.json
+      - artifacts/pr_curve.json
+      - artifacts/confusion_matrix.json
+
+  register:
+    cmd: python scripts/register.py
+    deps:
+      - scripts/register.py
+      - artifacts/model.pt
+      - artifacts/test_metrics.json
+    params:
+      - register
+    always_changed: true
