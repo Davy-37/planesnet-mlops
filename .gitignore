@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+
+# Tests and quality
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Data, models and artifacts (never versioned)
+/data/
+/artifacts/
+/mlruns/
+*.pt
+*.pth
+*.onnx
+*.ckpt
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Internal documents (not published)
+DEV_RULES.md
+
+# Internal design and strategy documents (never published)
+CONCEPTION.md
+JOURNAL.md
+DOSSIER_SOURCE*.md
+company_notes*.md
+*playbook*.md
+*PLAN_*.md
+docs/conception/
