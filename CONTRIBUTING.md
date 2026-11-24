@@ -121,7 +121,7 @@ If your change modifies behavior, the public API, the pipeline or the deployment
 - Cover **normal cases**, **edge cases** (empty input, boundaries, single class, single scene) and **expected exceptions** (`pytest.raises`).
 - Use `@pytest.mark.parametrize` instead of copying the same test.
 - **Every bug fix comes with a regression test** that fails before the fix and passes after.
-- Check coverage with `make test` and look at the missing lines. Coverage is a guide, not a target: a meaningful assertion beats a covered line.
+- Check coverage with `make test`: the report lists the lines no test runs. Add tests for the ones that matter, with assertions on the result.
 - Any change to data splitting must keep `tests/test_split_leakage.py` green: no `scene_id` may appear in more than one split.
 
 ### Methodology rules
