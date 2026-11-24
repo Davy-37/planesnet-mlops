@@ -1,6 +1,6 @@
 # Limites connues
 
-Document public. Une faiblesse annoncée par l'auteur vaut mieux que la même faiblesse découverte par un recruteur.
+Limites connues du projet, mises à jour à chaque étape.
 
 ## Par conception
 

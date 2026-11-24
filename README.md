@@ -4,9 +4,9 @@
 
 **Objectif :** transformer le projet universitaire PlanesNet en un système ML déployé et opéré en production.
 
-**Ce que ça prouve :** capacité à déployer, versionner et surveiller un modèle en production — le tier *ingénieur*, défendable face à l'automatisation.
+**Contenu :** données et entraînement versionnés (DVC, MLflow), service FastAPI, déploiement Kubernetes et suivi de la dérive.
 
-**Angle différenciant :** imagerie satellite → aéronautique / spatial / défense.
+**Domaine :** imagerie satellite (aéronautique, spatial, défense).
 
 ## Stack
 - **Modèle :** PyTorch (ResNet fine-tuné)
