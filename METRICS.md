@@ -1,8 +1,8 @@
 # Métriques mesurées
 
-Une case vide n'est jamais comblée par une estimation.
+Valeurs mesurées, avec leur date. Une case vide correspond à une métrique pas encore mesurée.
 
-## Le chiffre central — fuite de données par scène
+## Fuite de données par scène
 
 | Protocole de split | Exactitude | AP | AUC | Rappel | Date |
 |---|---|---|---|---|---|
